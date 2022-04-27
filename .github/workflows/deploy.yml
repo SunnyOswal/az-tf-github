@@ -46,6 +46,7 @@ jobs:
       run: |
         cd terraform
         varFilePath=$(find . -type f -name '*.json' -print0)
+        echo "Var file path: $varFilePath"
         terraform plan -input=false -var-file=$varFilePath
 
       # On push to main, build or change infrastructure according to Terraform configuration files
