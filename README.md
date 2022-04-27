@@ -18,5 +18,7 @@
 # File succesfully processed will be in processing/passed
 # File failed will be in processing/failed
 
+# .gitkeep files are just added in processing/passed and processing/failed folders as git doesn't allow empty dirs to be part of repo.
+
 # Azure Resource group created
 <img width="1514" alt="image" src="https://user-images.githubusercontent.com/19683199/164457790-f959f6f1-c953-43e6-b6bd-4b7e3a50b829.png">
