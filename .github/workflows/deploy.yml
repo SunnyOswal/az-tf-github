@@ -72,7 +72,7 @@ jobs:
         ls ${{ github.workspace }}/processing/passed
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
-        git add .
+        git add ./processing/passed
         git commit -m "File processed succesfully"
 
     # If failed, Move var file to processing/failed
@@ -84,7 +84,7 @@ jobs:
         mv $varFilePath ./processing/failed
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
-        git add .
+        git add ./processing/failed
         git commit -m "File processing failed"
         
     - name: Push Changes
