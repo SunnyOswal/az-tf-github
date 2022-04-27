@@ -68,7 +68,12 @@ jobs:
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome == 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
-        mv $varFilePath ${{ github.workspace }}/processing/passed
+        ls
+        ls ./processing/passed
+        mv $varFilePath ./processing/passed
+        ls
+        ls ./processing/passed
+        cd ${{ github.workspace }}
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
         git commit -am "File processed succesfully"
@@ -79,7 +84,13 @@ jobs:
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome != 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
-        mv $varFilePath ${{ github.workspace }}/processing/passed
+        ls
+        ls ./processing/failed
+        mv $varFilePath ./processing/failed
+        ls
+        ls ./processing/failed
+        cd ${{ github.workspace }}
+        ls
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
         git commit -am "File processing failed"
