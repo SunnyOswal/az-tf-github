@@ -1,9 +1,6 @@
 name: 'Terraform'
 
 on:
-  push:
-    branches:
-    - main
   pull_request:
 
 permissions:
@@ -51,7 +48,7 @@ jobs:
 
       # On push to main, build or change infrastructure according to Terraform configuration files
     - name: TerraformApply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main'
       continue-on-error: true
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
@@ -60,7 +57,7 @@ jobs:
 
     # If passed, Move var file to processing/passed
     - name: MoveVarFileToPassedDir
-      if: steps.TerraformApply.outcome == 'success'
+      if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome == 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
         mv $varFilePath ./processing/passed
@@ -69,9 +66,8 @@ jobs:
 
     # If failed, Move var file to processing/failed
     - name: MoveVarFileToFailedDir
-      if: steps.TerraformApply.outcome != 'success'
+      if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome != 'success'
       run: |
-        ls
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
         mv $varFilePath ./processing/failed
         git commit -am "File processing failed"
