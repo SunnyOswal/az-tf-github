@@ -47,7 +47,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: TerraformPlan
       run: |
-        varFilePath=$(find . -maxdepth 1 -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         echo "Var file path: $varFilePath"
         cd terraform
         terraform plan -input=false -var-file=$varFilePath
@@ -58,7 +58,7 @@ jobs:
       if: github.ref == 'refs/heads/main'
       continue-on-error: true
       run: |
-        varFilePath=$(find . -maxdepth 1 -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         cd terraform
         terraform apply -auto-approve -input=false -var-file=$varFilePath
 
@@ -67,7 +67,7 @@ jobs:
       id: MoveVarFileToPassedDir
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome == 'success'
       run: |
-        varFilePath=$(find . -maxdepth 1 -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         mv $varFilePath ./processing/passed
         ls ${{ github.workspace }}/processing/passed
         git config --global user.email "pipeline@pipeline.com"
@@ -80,7 +80,7 @@ jobs:
       id: MoveVarFileToFailedDir
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome != 'success'
       run: |
-        varFilePath=$(find . -maxdepth 1 -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         mv $varFilePath ./processing/failed
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
