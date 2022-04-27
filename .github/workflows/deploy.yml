@@ -72,7 +72,8 @@ jobs:
         ls ${{ github.workspace }}/processing/passed
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
-        git commit -am "File processed succesfully"
+        git add .
+        git commit -m "File processed succesfully"
 
     # If failed, Move var file to processing/failed
     - name: MoveVarFileToFailedDir
@@ -81,12 +82,10 @@ jobs:
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
         mv $varFilePath ./processing/failed
-        ls ${{ github.workspace }}/processing/failed
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
-        git status
-        git commit -am "File processing failed"
-        git status
+        git add .
+        git commit -m "File processing failed"
         
     - name: Push Changes
       if: steps.MoveVarFileToPassedDir.outcome == 'success' || steps.MoveVarFileToFailedDir.outcome == 'success'
