@@ -11,12 +11,11 @@
 # Github Action File
 + .github/workflows/deploy.yml
 
+# Github Action File succesfully processed will be in processing/passed
+<img width="1684" alt="image" src="https://user-images.githubusercontent.com/19683199/165535369-2be73be6-4503-4e04-97b5-90f37f597087.png">
 
-# Github Action 
-<img width="1344" alt="image" src="https://user-images.githubusercontent.com/19683199/164457650-0cf8c564-e819-4186-973e-c6dfb2292ef2.png">
-
-# File succesfully processed will be in processing/passed
-# File failed will be in processing/failed
+# Github Action File failed will be in processing/failed
+<img width="1684" alt="image" src="https://user-images.githubusercontent.com/19683199/165535551-1ea686eb-7dc2-42d2-b49a-c693a9c9ea0f.png">
 
 # Azure Resource group created
 <img width="1514" alt="image" src="https://user-images.githubusercontent.com/19683199/164457790-f959f6f1-c953-43e6-b6bd-4b7e3a50b829.png">
