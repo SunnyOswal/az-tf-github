@@ -1,8 +1,9 @@
 # az-tf-github
 
 # Secrets
-+ 4 Secrets configured in github repo settings which is used in github action pipeline.
-<img width="1514" alt="image" src="https://user-images.githubusercontent.com/19683199/164457872-660ca6d1-8910-44e6-aea0-0c89a4604278.png">
++ 5 Secrets configured in github repo settings which is used in github action pipeline.
+<img width="842" alt="image" src="https://user-images.githubusercontent.com/19683199/165492270-56a0e30b-1d65-4e06-b80f-fae2cb79f790.png">
+
 
 # Terraform Var File 
 + 01-var.json
