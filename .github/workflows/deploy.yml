@@ -71,6 +71,7 @@ jobs:
     - name: MoveVarFileToFailedDir
       if: steps.TerraformApply.outcome != 'success'
       run: |
+        ls
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
         mv $varFilePath ./processing/failed
         git commit -am "File processing failed"
