@@ -28,15 +28,49 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    # Checkout terraform repo
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        repository: SunnyOswal/az-tf
+        path: './terraform'
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: |
+        cd terraform
+        terraform init
 
     # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false
+    - name: TerraformPlan
+      run: |
+        cd terraform
+        varFilePath=$(find . -type f -name '*.json' -print0)
+        terraform plan -input=false -var-file=$varFilePath
 
       # On push to main, build or change infrastructure according to Terraform configuration files
-    - name: Terraform Apply
+    - name: TerraformApply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
+      continue-on-error: true
+      run: |
+        cd terraform
+        varFilePath=$(find . -type f -name '*.json' -print0)
+        terraform apply -auto-approve -input=false -var-file=$varFilePath
+
+    # If passed, Move var file to processing/passed
+    - name: MoveVarFileToPassedDir
+      if: steps.TerraformApply.outcome == 'success'
+      run: |
+        varFilePath=$(find . -type f -name '*.json' -print0)
+        mv $varFilePath processing/passed
+        git commit -am "File processed succesfully"
+        git push -f origin main
+
+    # If failed, Move var file to processing/failed
+    - name: MoveVarFileToFailedDir
+      if: steps.TerraformApply.outcome != 'success'
+      run: |
+        varFilePath=$(find . -type f -name '*.json' -print0)
+        mv $varFilePath processing/failed
+        git commit -am "File processing failed"
+        git push -f origin main
