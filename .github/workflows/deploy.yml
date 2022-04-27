@@ -44,7 +44,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: TerraformPlan
       run: |
-        varFilePath=$(find . -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -type f -name '*.json' -print0)
         echo "Var file path: $varFilePath"
         cd terraform
         terraform plan -input=false -var-file=$varFilePath
@@ -54,7 +54,7 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       continue-on-error: true
       run: |
-        varFilePath=$(find . -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -type f -name '*.json' -print0)
         cd terraform
         terraform apply -auto-approve -input=false -var-file=$varFilePath
 
@@ -62,7 +62,7 @@ jobs:
     - name: MoveVarFileToPassedDir
       if: steps.TerraformApply.outcome == 'success'
       run: |
-        varFilePath=$(find . -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -type f -name '*.json' -print0)
         mv $varFilePath processing/passed
         git commit -am "File processed succesfully"
         git push -f origin main
@@ -71,7 +71,7 @@ jobs:
     - name: MoveVarFileToFailedDir
       if: steps.TerraformApply.outcome != 'success'
       run: |
-        varFilePath=$(find . -type f -name '*.json' -print0)
+        varFilePath=$(find ~+ -type f -name '*.json' -print0)
         mv $varFilePath processing/failed
         git commit -am "File processing failed"
         git push -f origin main
