@@ -44,9 +44,9 @@ jobs:
     # Generates an execution plan for Terraform
     - name: TerraformPlan
       run: |
-        cd terraform
         varFilePath=$(find . -type f -name '*.json' -print0)
         echo "Var file path: $varFilePath"
+        cd terraform
         terraform plan -input=false -var-file=$varFilePath
 
       # On push to main, build or change infrastructure according to Terraform configuration files
@@ -54,8 +54,8 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       continue-on-error: true
       run: |
-        cd terraform
         varFilePath=$(find . -type f -name '*.json' -print0)
+        cd terraform
         terraform apply -auto-approve -input=false -var-file=$varFilePath
 
     # If passed, Move var file to processing/passed
