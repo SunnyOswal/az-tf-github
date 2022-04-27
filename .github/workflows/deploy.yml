@@ -54,6 +54,7 @@ jobs:
 
       # On push to main, build or change infrastructure according to Terraform configuration files
     - name: TerraformApply
+      id: TerraformApply
       if: github.ref == 'refs/heads/main'
       continue-on-error: true
       run: |
@@ -63,6 +64,7 @@ jobs:
 
     # If passed, Move var file to processing/passed
     - name: MoveVarFileToPassedDir
+      id: MoveVarFileToPassedDir
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome == 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
@@ -73,6 +75,7 @@ jobs:
 
     # If failed, Move var file to processing/failed
     - name: MoveVarFileToFailedDir
+      id: MoveVarFileToFailedDir
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome != 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
@@ -81,7 +84,7 @@ jobs:
         git config --global user.name "pipeline"
         git commit -am "File processing failed"
         
-    - name: PushChanges
+    - name: Push Changes
       if: steps.MoveVarFileToPassedDir.outcome == 'success' || steps.MoveVarFileToFailedDir.outcome == 'success'
       uses: ad-m/github-push-action@master
       with:
