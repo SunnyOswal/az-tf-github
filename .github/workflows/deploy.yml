@@ -83,11 +83,17 @@ jobs:
       if: github.ref == 'refs/heads/main' && steps.TerraformApply.outcome != 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
+        echo "1"
         ls ${{ github.workspace }}/processing/failed
+        echo "2"
         mv $varFilePath ./processing/failed
+        echo "3"
         ls ${{ github.workspace }}/processing/failed
+        echo "4"
         cd ${{ github.workspace }}
+        echo "5"
         ls ${{ github.workspace }}/processing/failed
+        echo "6"
         git config --global user.email "pipeline@pipeline.com"
         git config --global user.name "pipeline"
         git commit -am "File processing failed"
