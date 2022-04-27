@@ -63,7 +63,7 @@ jobs:
       if: steps.TerraformApply.outcome == 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
-        mv $varFilePath processing/passed
+        mv $varFilePath ./processing/passed
         git commit -am "File processed succesfully"
         git push -f origin main
 
@@ -72,6 +72,6 @@ jobs:
       if: steps.TerraformApply.outcome != 'success'
       run: |
         varFilePath=$(find ~+ -type f -name '*.json' -print0)
-        mv $varFilePath processing/failed
+        mv $varFilePath ./processing/failed
         git commit -am "File processing failed"
         git push -f origin main
