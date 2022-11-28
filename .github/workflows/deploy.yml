@@ -49,7 +49,7 @@ jobs:
         varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         echo "Var file path: $varFilePath"
         cd terraform
-        # terraform plan -input=false -var-file=$varFilePath
+        terraform plan -input=false -var-file=$varFilePath
 
       # On push to main, build or change infrastructure according to Terraform configuration files
     - name: TerraformApply
@@ -59,7 +59,7 @@ jobs:
       run: |
         varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         cd terraform
-        # terraform apply -auto-approve -input=false -var-file=$varFilePath
+        terraform apply -auto-approve -input=false -var-file=$varFilePath
 
     # If passed, Move var file to processing/passed
     - name: MoveVarFileToPassedDir
