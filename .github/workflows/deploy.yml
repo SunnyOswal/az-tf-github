@@ -20,6 +20,14 @@ jobs:
         shell: bash
 
     steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+         ssh-key: ${{ secrets.AZ_TF_GITHUB_PRIVATE_KEY }}
+         persist-credentials: true
+         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+
     # Checkout terraform repo
     - name: Checkout
       uses: actions/checkout@v3
@@ -28,14 +36,6 @@ jobs:
         path: './terraform'
         ssh-key: ${{ secrets.AZ_TF_PRIVATE_KEY }}
         persist-credentials: false
-
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-         ssh-key: ${{ secrets.AZ_TF_GITHUB_PRIVATE_KEY }}
-         persist-credentials: true
-         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
