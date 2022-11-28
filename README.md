@@ -27,8 +27,17 @@ RECAP of what github actions does to 2 repos:
 + Workflow reads from `SunnyOswal/az-tf` repo.
 + Workflow writes to `SunnyOswal/az-tf-github` repo.
 
+SUMMARY OF WHAT WE WILL DO TO MAKE ABOVE WORK:
++ Create key pair 1 :
+  + Public key of this key pair will be added to `az-tf` repo's `Deploy keys`
+  + Private key of this key pair will be added to `az-tf-github` repo as secret so that pipeline can clone `az-tf` repo.
 
-## Generating a new SSH key for `az-tf` repo
++ Create key pair 2 :
+  + Public key of this key pair will be added to `az-tf-github` repo's `Deploy keys`
+  + Private key of this key pair will be added to `az-tf-github` repo as secret so that pipeline can write to `az-tf-github` repo.
+
+
+## Create key pair 1 for `az-tf` repo
 + Open Terminal.
 + Paste the text below, substituting in your GitHub email address.
 ```
@@ -37,21 +46,27 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 + After following as per prompt, you will see below message:
 `Your public key has been saved in /home/XXXX/.ssh/id_ed25519.pub`
 
-+ Get public key by running below command (public key path from above step):
++ Get public key by running below command (public key path from above step). Keep this public key handy as will be used in below steps.
 ```
 cat /home/XXXX/.ssh/id_ed25519.pub
 ```
 
-+ Keep this public key handy as will be used in below step.
++ Get private key by running below command (public key path from above step). Keep this private key handy as will be used in below steps.
+```
+cat /home/XXXX/.ssh/id_ed25519
+```
 
-## Add Public key to repo `az-tf` repo
+## Add Public key to `az-tf` repo
 + From your repository, click Settings.
 + In the sidebar, click Deploy Keys, then click Add deploy key.
 + Provide a title `PublicKey`, paste in your public key from previous `Generating a new SSH key` step and click `Add key`
 + DO NOT CHECK THE CHECKBOX AS WE ONLY WANT TO READ FROM `az-tf` repo
 ![image](https://user-images.githubusercontent.com/19683199/204340698-77051f35-21d6-4518-b2ad-94453ac7819a.png)
 
-## Generating a new SSH key for `az-tf-github` repo
+## Add Private key to `az-tf-github` repo SECRET (AZ_TF_PRIVATE_KEY) so that it can clone az-tf repo
+![image](https://user-images.githubusercontent.com/19683199/204345298-31422bbb-9596-44cb-bfe8-2f1ff2655ad7.png)
+
+## Create key pair 2 for `az-tf-github` repo
 + Open Terminal.
 + Paste the text below, substituting in your GitHub email address.
 ```
@@ -81,7 +96,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 cat /home/XXXX/.ssh/id_ed25519_v2.pub
 ```
 
-## Add Public key to repo `az-tf-github` repo
+## Add Public key to `az-tf-github` repo
 + From your repository, click Settings.
 + In the sidebar, click Deploy Keys, then click Add deploy key.
 + Provide a title `PublicKey`, paste in your public key from previous `Generating a new SSH key` step and click `Add key`
@@ -89,5 +104,7 @@ cat /home/XXXX/.ssh/id_ed25519_v2.pub
 ![image](https://user-images.githubusercontent.com/19683199/204341524-b1746fc8-1490-4311-b646-fc9d4ca2976f.png)
 
 
-## Add Private key to repo
+## Add Private key to `az-tf-github` repo SECRET (AZ_TF_GITHUB_PRIVATE_KEY) so that it can write to az-tf-github repo.
 
+## Total secrets (you can remove the `REPO_TOKEN` as no longer required):
+![image](https://user-images.githubusercontent.com/19683199/204347817-c95e4f70-becd-4937-9879-d755ede7350b.png)
