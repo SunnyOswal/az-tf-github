@@ -29,10 +29,12 @@ jobs:
 
     # Checkout terraform repo
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: SunnyOswal/az-tf
         path: './terraform'
+        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        persist-credentials: true
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -87,5 +89,5 @@ jobs:
       if: steps.MoveVarFileToPassedDir.outcome == 'success' || steps.MoveVarFileToFailedDir.outcome == 'success'
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.REPO_TOKEN }}
+        ssh: true
         branch: ${{ github.ref }}
