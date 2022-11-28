@@ -20,21 +20,14 @@ jobs:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
-
     # Checkout terraform repo
     - name: Checkout
       uses: actions/checkout@v3
       with:
         repository: SunnyOswal/az-tf
         path: './terraform'
-        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        persist-credentials: true
+        ssh-key: ${{ secrets.AZ_TF_PRIVATE_KEY }}
+        persist-credentials: false
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -59,6 +52,14 @@ jobs:
         varFilePath=$(find ~+ -maxdepth 1 -type f -name '*.json' -print0)
         cd terraform
         terraform apply -auto-approve -input=false -var-file=$varFilePath
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+         ssh-key: ${{ secrets.AZ_TF_GITHUB_PRIVATE_KEY }}
+         persist-credentials: true
+         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
     # If passed, Move var file to processing/passed
     - name: MoveVarFileToPassedDir
